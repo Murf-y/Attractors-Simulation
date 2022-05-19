@@ -102,7 +102,7 @@ body{
 .numberBox{
     margin-left: 0.5rem;
     background-color: rgba(233, 233, 233, 0.5);
-    max-width: 2em;
+    max-width: 2.2em;
     border-radius: 5%;
     text-align: center;
     box-shadow: 0 0px 2px rgba(0,0,0,0.4),
@@ -140,7 +140,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
     .numberBox{
         font-size: 0.7rem;
-        max-width: 2em; 
+        max-width: 2.1em; 
     }
 }
 @media screen and (max-width: 600px) {
@@ -164,7 +164,7 @@ input[type=number]::-webkit-outer-spin-button {
     
     .numberBox{
         font-size: 0.6rem;
-        max-width: 1.5em; 
+        max-width: 1.6em; 
     }
     
 }
@@ -189,7 +189,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
     .numberBox{
         font-size: 0.6rem;
-        max-width: 1.3em; 
+        max-width: 1.4em; 
     }
    
 }

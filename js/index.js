@@ -1,32 +1,53 @@
 import getRandomColor from '../js/colors.js'
+
 const canvas = document.getElementById('canvas')
 const navbar = document.getElementById('navbar')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight - navbar.clientHeight;
-
-
 const ctx = canvas.getContext('2d')
+
+
 const dt = 0.01
 const sigma = 10
 const rho = 28
 const beta = 8/3
-let path = [{x:1, y:1, z:1}]
+
+
 const FPS = 60
 const scale_factor = Math.min(canvas.width, canvas.height) / 2 - 10
 const steps_per_frame = 6;
-
-var duration_till_replace_path = 1000;
-var rotation_speed = 0.01;
-var current_color = getRandomColor()
-
 
 var q = 0
 var a = canvas.width/6
 var b = canvas.width/5
 var c = canvas.width/2
 
+
+let paths = []
+let colors = []
+
+
+const numberOfPathsBox = document.getElementById("numberOfPathsBox")
+const numberOfPathsSlider = document.getElementById("numberOfPathsSlider")
+var number_of_paths = numberOfPathsBox.value;
+updatePaths()
+
+numberOfPathsBox.addEventListener('change', (e) => {
+  if(e.target.value >= 0){
+    number_of_paths = e.target.value
+    updatePaths()
+  }
+})
+numberOfPathsSlider.addEventListener('input', (e) => {
+  if(e.target.value >= 0){
+    number_of_paths = e.target.value
+    updatePaths()
+  }
+})
+
 const densityBox = document.getElementById('densityBox')
 const densitySlider = document.getElementById('densitySlider')
+var duration_till_replace_path = densityBox.value;
 densityBox.addEventListener('change', (e) => {
     if(e.target.value > 0) duration_till_replace_path = e.target.value
 })
@@ -38,6 +59,7 @@ densitySlider.addEventListener('input', (e) => {
 
 const rotationBox = document.getElementById('rotationBox')
 const rotationSlider = document.getElementById('rotationSlider')
+var rotation_speed = rotationBox.value;
 rotationSlider.addEventListener('input', (e) => {
     if(e.target.value >= 0) {
         rotation_speed = e.target.value
@@ -48,6 +70,17 @@ rotationBox.addEventListener('change', (e) => {
         rotation_speed = e.target.value
     }
 })
+
+
+function updatePaths(){
+  paths = []
+  colors = []
+  for(var i = 0; i < number_of_paths; i++){
+    let epsilon = (Math.random() - 0.02) * 0.02
+    paths.push([{x: epsilon ,y: epsilon ,z: epsilon}])
+    colors.push(getRandomColor());
+  }
+}
 
 function lorenz({x,y,z}){
   x += (sigma*(y-x)) * dt
@@ -67,15 +100,15 @@ function extendPath(path, steps){
 }
 
 function scale(points, size){
-  const mx = Math.min(...points.map( ({x,y,z}) => x) )
-  const Mx = Math.max(...points.map( ({x,y,z}) => x) )
-  const my = Math.min(...points.map( ({x,y,z}) => y) )
-  const My = Math.max(...points.map( ({x,y,z}) => y) )
-  const mz = Math.min(...points.map( ({x,y,z}) => z) )
-  const Mz = Math.max(...points.map( ({x,y,z}) => z) )
+  const mx = Math.min(...points.slice(1).map( ({x,y,z}) => x) )
+  const Mx = Math.max(...points.slice(1).map( ({x,y,z}) => x) )
+  const my = Math.min(...points.slice(1).map( ({x,y,z}) => y) )
+  const My = Math.max(...points.slice(1).map( ({x,y,z}) => y) )
+  const mz = Math.min(...points.slice(1).map( ({x,y,z}) => z) )
+  const Mz = Math.max(...points.slice(1).map( ({x,y,z}) => z) )
 
   const s = (v, mv, Mv) => size * (v - mv) / (Mv - mv)
-  return points.map( ({x,y,z}) => {
+  return points.slice(1).map( ({x,y,z}) => {
     x=s(x, mx, Mx)
     y=s(y, my, My)
     z=s(z, mz, Mz)
@@ -84,31 +117,31 @@ function scale(points, size){
 }
 
 
-function draw(path){
-    if(q > 2 * Math.PI) q = 0
+function draw(path, i){
+  if(q > 2 * Math.PI) q = 0
   const map = ({x,y,z}) => [(x - a)*Math.cos(q) - (y - b)*Math.sin(q) + c, z]
   ctx.beginPath();
-  ctx.strokeStyle = current_color
-  path.map(map).forEach( p => ctx.lineTo(p[0], p[1]))
+  ctx.strokeStyle = colors[i]
+  path.slice(1).map(map).forEach( p => ctx.lineTo(p[0], p[1]))
   ctx.stroke()
 }
 
 
-function step(){
+function update(){
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   q -= rotation_speed
-  path = extendPath(path, steps_per_frame)
-  const scaled = scale(path, scale_factor)
-  draw(scaled)
-  while(path.length > duration_till_replace_path) path.shift()
+  for(var i = 0 ; i < paths.length; i++){
+    paths[i] = extendPath(paths[i], steps_per_frame)
+    draw(scale(paths[i], scale_factor), i)
+    while(paths[i].length > duration_till_replace_path) paths[i].shift()
+  }
 }
 
 function main(){
     resize()
-    setInterval(step, 1000/FPS)
+    setInterval(update, 1000/FPS)
 }
 function resize() {
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - navbar.clientHeight;
     a = canvas.width/6
