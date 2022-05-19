@@ -11,30 +11,44 @@
 <body>
     <section class="navbar" id ="navbar">
         <div class="title">Lorenz Attractor</div>
-        <form class="form">
+        <div class="thing">
+            <form class="form">
             
-            <div class="labelWithBox">
-                <label>Density: </label>
-                <input type="number" id = "densityBox" class="numberBox" name="densityBox" min="10" max="100000" value="10000" oninput="this.form.densitySlider.value=this.value" />
-            </div>
-            <input type="range" class="slider" id ="densitySlider" name="densitySlider" min="10" max="100000" value="10000" oninput="this.form.densityBox.value=this.value" />
-        </form>
-        <form class="form">
+                <div class="labelWithBox">
+                    <label>Density: </label>
+                    <input type="number" id = "densityBox" class="numberBox" name="densityBox" min="10" max="100000" value="1000" oninput="this.form.densitySlider.value=this.value" />
+                </div>
+                <input type="range" class="slider" id ="densitySlider" name="densitySlider" min="10" max="100000" value="1000" oninput="this.form.densityBox.value=this.value" />
+            </form>
+            <form class="form">
             
-            <div class="labelWithBox">
-                <label>#paths: </label>
-                <input type="number" id = "numberOfPathsBox" class="numberBox" name="numberOfPathsBox" min="0" max="10" value="2" oninput="this.form.numberOfPathsSlider.value=this.value" />
-            </div>
-            <input type="range" class="slider" id ="numberOfPathsSlider" name="numberOfPathsSlider" min="0" max="10" value="2" oninput="this.form.numberOfPathsBox.value=this.value" />
-        </form>
-        <form class="form">
+                <div class="labelWithBox">
+                    <label>Speed: </label>
+                    <input type="number" id = "speedBox" class="numberBox" name="speedBox" min="1" max="15" value="3" oninput="this.form.speedSlider.value=this.value" />
+                </div>
+                <input type="range" class="slider" id ="speedSlider" name="speedSlider" min="1" max="15" value="3" oninput="this.form.speedBox.value=this.value" />
+            </form>
+        </div>
+        
+        <div class="thing">
+            <form class="form">
             
-            <div class="labelWithBox">
-                <label>Rotation: </label>
-                <input type="number" id = "rotationBox" class="numberBox" name="rotationBox" min="0" max="1" value="0.01" oninput="this.form.rotationSlider.value=this.value" />
-            </div>
-            <input type="range" class="slider" id ="rotationSlider" name="rotationSlider" min="0" max="1" value="0.01" step="0.001" oninput="this.form.rotationBox.value=this.value" />
-        </form>
+                <div class="labelWithBox">
+                    <label>#Paths: </label>
+                    <input type="number" id = "numberOfPathsBox" class="numberBox" name="numberOfPathsBox" min="0" max="10" value="2" oninput="this.form.numberOfPathsSlider.value=this.value" />
+                </div>
+                <input type="range" class="slider" id ="numberOfPathsSlider" name="numberOfPathsSlider" min="0" max="10" value="2" oninput="this.form.numberOfPathsBox.value=this.value" />
+            </form>
+            <form class="form">
+                
+                <div class="labelWithBox">
+                    <label>Rotation: </label>
+                    <input type="number" id = "rotationBox" class="numberBox" name="rotationBox" min="0" max="1" value="0.01" oninput="this.form.rotationSlider.value=this.value" />
+                </div>
+                <input type="range" class="slider" id ="rotationSlider" name="rotationSlider" min="0" max="1" value="0.01" step="0.001" oninput="this.form.rotationBox.value=this.value" />
+            </form>
+        </div>
+        
         
     </section>
     

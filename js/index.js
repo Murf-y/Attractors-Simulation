@@ -15,11 +15,11 @@ const beta = 8/3
 
 const FPS = 60
 const scale_factor = Math.min(canvas.width, canvas.height) / 2 - 10
-const steps_per_frame = 6;
+
 
 var q = 0
-var a = canvas.width/6
-var b = canvas.width/5
+var a = canvas.width/7
+var b = canvas.width/6
 var c = canvas.width/2
 
 
@@ -33,7 +33,7 @@ var number_of_paths = numberOfPathsBox.value;
 updatePaths()
 
 numberOfPathsBox.addEventListener('change', (e) => {
-  if(e.target.value >= 0){
+  if(e.target.value >= 0 && e.target.value <= 10){
     number_of_paths = e.target.value
     updatePaths()
   }
@@ -45,11 +45,29 @@ numberOfPathsSlider.addEventListener('input', (e) => {
   }
 })
 
+const speedBox = document.getElementById("speedBox")
+const speedSlider = document.getElementById("speedSlider")
+var steps_per_frame = speedBox.value
+speedBox.addEventListener('change', (e) => {
+  if(e.target.value >= 0 && e.target.value <= 15){
+    steps_per_frame = e.target.value
+    updatePaths()
+  }
+})
+speedSlider.addEventListener('input', (e) => {
+  if(e.target.value >= 0){
+    steps_per_frame = e.target.value
+    updatePaths()
+  }
+})
+
+
+
 const densityBox = document.getElementById('densityBox')
 const densitySlider = document.getElementById('densitySlider')
 var duration_till_replace_path = densityBox.value;
 densityBox.addEventListener('change', (e) => {
-    if(e.target.value > 0) duration_till_replace_path = e.target.value
+    if(e.target.value > 0 && e.target.value  <= 100000) duration_till_replace_path = e.target.value
 })
 densitySlider.addEventListener('input', (e) => {
     if(e.target.value > 0) duration_till_replace_path = e.target.value
@@ -61,7 +79,7 @@ const rotationBox = document.getElementById('rotationBox')
 const rotationSlider = document.getElementById('rotationSlider')
 var rotation_speed = rotationBox.value;
 rotationSlider.addEventListener('input', (e) => {
-    if(e.target.value >= 0) {
+    if(e.target.value >= 0 && e.target.value <= 1) {
         rotation_speed = e.target.value
     } 
 })
@@ -75,8 +93,9 @@ rotationBox.addEventListener('change', (e) => {
 function updatePaths(){
   paths = []
   colors = []
+  let epsilon_base = Math.random() - Math.random()
   for(var i = 0; i < number_of_paths; i++){
-    let epsilon = (Math.random() - 0.02) * 0.02
+    let epsilon = epsilon_base + (Math.random() - 0.01) * 0.001
     paths.push([{x: epsilon ,y: epsilon ,z: epsilon}])
     colors.push(getRandomColor());
   }
@@ -144,8 +163,8 @@ function main(){
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - navbar.clientHeight;
-    a = canvas.width/6
-    b = canvas.width/5
+    a = canvas.width/7
+    b = canvas.width/6
     c = canvas.width/2
 }
 window.addEventListener('resize', resize, false); 
