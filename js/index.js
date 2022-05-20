@@ -1,4 +1,5 @@
 import getRandomColor from '../js/colors.js'
+import attractors from '../js/attractors.js'
 
 const canvas = document.getElementById('canvas')
 const navbar = document.getElementById('navbar')
@@ -8,10 +9,6 @@ const ctx = canvas.getContext('2d')
 
 
 const dt = 0.01
-const sigma = 10
-const rho = 28
-const beta = 8/3
-
 
 const FPS = 60
 const scale_factor = Math.min(canvas.width, canvas.height) / 2 - 10
@@ -25,7 +22,13 @@ var c = canvas.width/2
 
 let paths = []
 let colors = []
+let chosenAttractorFunction = attractors[0]
 
+const attractorChoice = document.getElementById('attractorChoice')
+attractorChoice.addEventListener('change', (e) => {
+  updatePaths()
+  chosenAttractorFunction = attractors[e.target.value - 1]
+})
 
 const numberOfPathsBox = document.getElementById("numberOfPathsBox")
 const numberOfPathsSlider = document.getElementById("numberOfPathsSlider")
@@ -96,23 +99,17 @@ function updatePaths(){
   let epsilon_base = Math.random() - Math.random()
   for(var i = 0; i < number_of_paths; i++){
     let epsilon = epsilon_base + (Math.random() - 0.01) * 0.001
-    paths.push([{x: epsilon ,y: epsilon ,z: epsilon}])
+    let withing_point_epsilon = (Math.random() - 0.01) * 0.001
+    paths.push([{x: epsilon + withing_point_epsilon ,y: epsilon +  withing_point_epsilon,z: epsilon + withing_point_epsilon}])
     colors.push(getRandomColor());
   }
-}
-
-function lorenz({x,y,z}){
-  x += (sigma*(y-x)) * dt
-  y += (x*(rho-z) - y)*dt
-  z += (x*y - beta*z)*dt
-  return {x,y,z}
 }
 
 
 function extendPath(path, steps){
   for(var i = 0 ; i < steps; i++){
     const lastP = path[path.length - 1]
-    const p = lorenz(lastP)
+    const p = chosenAttractorFunction(lastP, dt)
     path.push(p)
   }
   return path

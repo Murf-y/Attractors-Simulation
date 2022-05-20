@@ -32,7 +32,19 @@ body{
     font-size: 2.6rem;
     color: rgb(200, 91, 54);
 }
-
+.titleWithChoices{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.attractorChoice{
+    color: rgb(67, 46, 39);
+    border: 1px solid rgb(106, 45, 25);
+}
+.attractorChoice select{
+    display: none;
+}
 .labelWithBox{
     color: rgb(237, 175, 155);
     display: flex;
