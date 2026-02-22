@@ -1,84 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main..css" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
     <script src="js/index.js" defer type="module"></script>
-    <title>Attractors Simulation</title>
+    <title>Attractors Simulations</title>
 </head>
+
 <body>
-    <section class="navbar" id ="navbar">
-        <div class="titleWithChoices">
-            <div class="title">Attractors Simulation</div>
-            <select class ="attractorChoice" name="attractor" id="attractorChoice">
-                <option value="1">Lorenz</option>
-                <option value="2">Halvorsen</option>
-                <option value="3">Three Cells CNN</option>
-                <option value="4">Newton Leipnik</option>
-                <option value="5">Aizawa</option>
-                <option value="6">Arneodo</option>
-                <option value="7">Burke_shaw</option>
-                <option value="8">Finance</option>
-                <option value="9">Rucklidge</option>
-                <option value="10">Sprott Linz a</option>
-                <option value="11">Sprott Linz e</option>
-                <option value="12">Sprott Linz j</option>
-                <option value="13">Sprott Linz l</option>
-                <option value="14">Sprott Linz r</option>
-                <option value="15">Sprott Linz s</option>
-                <option value="16">Thomas</option>
-                <option value="17">Yu Wang</option>
-                <option value="18">Zhou Chen</option>
-                <option value="19">Multi Sprott C</option>
-            </select>
+
+    <!-- FULLSCREEN CANVAS -->
+    <canvas id="canvas"></canvas>
+
+    <!-- SCANLINE OVERLAY -->
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <!-- FLOATING ATTRACTOR NAME -->
+    <div class="attractor-label" id="attractorLabel">LORENZ</div>
+
+    <!-- TOGGLE PANEL BUTTON -->
+    <button class="panel-toggle" id="panelToggle" aria-label="Toggle controls">
+        <span class="toggle-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="2" y="3" width="16" height="2" rx="1" fill="currentColor" />
+                <rect x="2" y="9" width="10" height="2" rx="1" fill="currentColor" />
+                <rect x="2" y="15" width="14" height="2" rx="1" fill="currentColor" />
+            </svg>
+        </span>
+        <span class="toggle-label">CTRL</span>
+    </button>
+
+    <!-- CONTROL PANEL -->
+    <aside class="panel" id="panel">
+        <div class="panel-inner">
+
+            <!-- HEADER -->
+            <header class="panel-header">
+                <div class="panel-title">
+                    <span class="title-glyph">◈</span>
+                    CHAOS SIMULATOR
+                </div>
+                <div class="panel-subtitle">Attractors & Dynamical Systems</div>
+            </header>
+
+            <!-- THEME PICKER -->
+            <div class="control-group theme-group">
+                <label class="control-label">THEME</label>
+                <div class="theme-swatches" id="themeSwatches">
+                    <button class="theme-swatch active" data-theme="terminal" title="Terminal">
+                        <span class="swatch-half" style="background:#0a0f0a"></span>
+                        <span class="swatch-half" style="background:#2e9025"></span>
+                    </button>
+                    <button class="theme-swatch" data-theme="dracula" title="Dracula">
+                        <span class="swatch-half" style="background:#282a36"></span>
+                        <span class="swatch-half" style="background:#bd93f9"></span>
+                    </button>
+                    <button class="theme-swatch" data-theme="nord" title="Nord">
+                        <span class="swatch-half" style="background:#2e3440"></span>
+                        <span class="swatch-half" style="background:#88c0d0"></span>
+                    </button>
+                    <button class="theme-swatch" data-theme="solarized" title="Solarized Light">
+                        <span class="swatch-half" style="background:#fdf6e3"></span>
+                        <span class="swatch-half" style="background:#268bd2"></span>
+                    </button>
+                    <button class="theme-swatch" data-theme="paper" title="Paper">
+                        <span class="swatch-half" style="background:#fafaf8"></span>
+                        <span class="swatch-half" style="background:#d14d41"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ATTRACTOR SELECTOR -->
+            <div class="control-group selector-group">
+                <label class="control-label">SYSTEM</label>
+                <div class="custom-select-wrap">
+                    <select id="attractorChoice" class="custom-select">
+                        <option value="1">Lorenz</option>
+                        <option value="2">Halvorsen</option>
+                        <option value="3">Three Cells CNN</option>
+                        <option value="4">Newton–Leipnik</option>
+                        <option value="5">Aizawa</option>
+                        <option value="6">Arneodo</option>
+                        <option value="7">Burke–Shaw</option>
+                        <option value="8">Finance</option>
+                        <option value="9">Rucklidge</option>
+                        <option value="10">Sprott–Linz A</option>
+                        <option value="11">Sprott–Linz E</option>
+                        <option value="12">Sprott–Linz J</option>
+                        <option value="13">Sprott–Linz L</option>
+                        <option value="14">Sprott–Linz R</option>
+                        <option value="15">Sprott–Linz S</option>
+                        <option value="16">Thomas</option>
+                        <option value="17">Yu Wang</option>
+                        <option value="18">Zhou Chen</option>
+                        <option value="19">Multi Sprott C</option>
+                    </select>
+                    <span class="select-arrow">▾</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- PARAMETERS -->
+            <div class="control-group">
+                <label class="control-label">DENSITY</label>
+                <div class="slider-row">
+                    <input type="range" class="slider" id="densitySlider" name="densitySlider" min="10" max="100000"
+                        value="1000" />
+                    <input type="number" class="num-input" id="densityBox" name="densityBox" min="10" max="100000"
+                        value="1000" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">SPEED</label>
+                <div class="slider-row">
+                    <input type="range" class="slider" id="speedSlider" name="speedSlider" min="1" max="15" value="3" />
+                    <input type="number" class="num-input" id="speedBox" name="speedBox" min="1" max="15" value="3" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">PATHS</label>
+                <div class="slider-row">
+                    <input type="range" class="slider" id="numberOfPathsSlider" name="numberOfPathsSlider" min="0"
+                        max="10" value="2" />
+                    <input type="number" class="num-input" id="numberOfPathsBox" name="numberOfPathsBox" min="0"
+                        max="10" value="2" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">ROTATION</label>
+                <div class="slider-row">
+                    <input type="range" class="slider" id="rotationSlider" name="rotationSlider" min="0" max="1"
+                        value="0.01" step="0.001" />
+                    <input type="number" class="num-input" id="rotationBox" name="rotationBox" min="0" max="1"
+                        value="0.01" step="0.001" />
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="control-group actions-group">
+                <button class="action-btn" id="resetBtn" title="Reset paths">
+                    <span class="action-icon">↻</span> RESET
+                </button>
+                <button class="action-btn" id="randomBtn" title="Random attractor">
+                    <span class="action-icon">⚄</span> RANDOM
+                </button>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="panel-footer">
+                <div class="footer-line">
+                    <span class="blink-dot"></span>
+                    <span class="footer-text" id="fpsCounter">60 FPS</span>
+                </div>
+                <div class="footer-hint">[ SPACE ] panel · [ R ] reset · [ N ] random · [ T ] theme</div>
+            </footer>
 
         </div>
-        
-        <div class="thing">
-            <form class="form">
-            
-                <div class="labelWithBox">
-                    <label>Density: </label>
-                    <input type="number" id = "densityBox" class="numberBox" name="densityBox" min="10" max="100000" value="1000" oninput="this.form.densitySlider.value=this.value" />
-                </div>
-                <input type="range" class="slider" id ="densitySlider" name="densitySlider" min="10" max="100000" value="1000" oninput="this.form.densityBox.value=this.value" />
-            </form>
-            <form class="form">
-            
-                <div class="labelWithBox">
-                    <label>Speed: </label>
-                    <input type="number" id = "speedBox" class="numberBox" name="speedBox" min="1" max="15" value="3" oninput="this.form.speedSlider.value=this.value" />
-                </div>
-                <input type="range" class="slider" id ="speedSlider" name="speedSlider" min="1" max="15" value="3" oninput="this.form.speedBox.value=this.value" />
-            </form>
-        </div>
-        
-        <div class="thing">
-            <form class="form">
-            
-                <div class="labelWithBox">
-                    <label>#Paths: </label>
-                    <input type="number" id = "numberOfPathsBox" class="numberBox" name="numberOfPathsBox" min="0" max="10" value="2" oninput="this.form.numberOfPathsSlider.value=this.value" />
-                </div>
-                <input type="range" class="slider" id ="numberOfPathsSlider" name="numberOfPathsSlider" min="0" max="10" value="2" oninput="this.form.numberOfPathsBox.value=this.value" />
-            </form>
-            <form class="form">
-                
-                <div class="labelWithBox">
-                    <label>Rotation: </label>
-                    <input type="number" id = "rotationBox" class="numberBox" name="rotationBox" min="0" max="1" value="0.01" oninput="this.form.rotationSlider.value=this.value" />
-                </div>
-                <input type="range" class="slider" id ="rotationSlider" name="rotationSlider" min="0" max="1" value="0.01" step="0.001" oninput="this.form.rotationBox.value=this.value" />
-            </form>
-        </div>
-        
-        
-    </section>
-    
-    <section class="app">
-        <canvas class="canvas" id="canvas"></canvas>
-    </section>
+    </aside>
+
 </body>
+
 </html>
